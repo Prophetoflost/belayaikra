@@ -1,0 +1,38 @@
+create the backup:
+./backupcaviar.sh
+this creates a backup file in the folder /home/backups/backup-2015-09-14-08:41:01.tar.gz
+Locally on the newly intalled server or on your computer:
+where are installed the following: PHP5, Apache2 and PostGreSQL (version 9.2 or more recent) 
+cd /tmp
+download the backup file (using FTP client) 
+tar xzf BackupFile.tar.gz
+This creates a directory tree: tmp/4backup
+Where there are the following:
+	caviar150220.dump  : the backup of the database
+	whitcav1	   : the root directory of the 'belayaikra' web site           
+1) Create the database in PostGreSQL 
+sudo -su postgres
+createdb --encoding=UTF8 -O postgres -T template0 caviar150914
+2) Construct the database from the backup database
+pg_restore -U postgres -d caviar150914 caviar150220.dump
+
+
+3) Move the root web folder in the root apache web folder
+exit
+mv whitcav1 /var/www/html
+4) edit the file /var/www/html/whitcav1/sites/default/settings.php
+by typing: vim /var/www/html/whitcav1/sites/default/settings.php
+5)locate the following string: caviar
+ by typing: /caviar
+this shows the line:
+      'database' => 'caviar150220',
+by putting the cursor on caviar150220 and typing cw and then Ecape key after the text is changed
+6)Change the name of the database to the newe name 'caviar150914'
+7) Save the file by typing: :wq!
+
+This is it.
+
+
+
+
+
