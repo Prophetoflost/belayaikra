@@ -1,0 +1,1244 @@
+<?php
+class achat {
+    // Creating some properties (variables tied to an object)
+    public $nom_client;
+    public $produit;
+    public $id_produit;
+    public $convives; // nombre de mangeurs
+    public $choix; // nombre de menus
+    public $detail = array(); // detail de la commande
+    public $policechar;
+    public $couleur;
+};
+function caviar_init() {
+// VL15091403 initialize the module
+    global $user;
+    $element = array(
+        '#tag' => 'link', // The #tag is the html tag - <link />
+        '#attributes' => array( // Set up an array of attributes inside the tag
+            'href' => 'http://belayaikra.ru/sites/all/libraries/FooTable/css/footable.metro.css',
+            'rel' => 'stylesheet',
+            'type' => 'text/css',
+        ),
+    );
+   // drupal_add_html_head($element, 'google_font_cardo');
+    drupal_add_js("sites/all/modules/caviar/caviarfootable.js");
+
+    $path= current_path();
+    //dojo_toolkit_load_dojo();
+}
+function caviar_boot() { //hopefully if it is called before init
+}
+function caviar_exit($destination = NULL) {
+}
+// function to set the callback menu
+function caviar_menu() {
+    $items['activer_utilisateur'] = array(
+        'title' => 'activate user',
+        'description' => 'activate new user',
+        'page callback' => 'caviar_activer_utilisateur',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['caviar/commande'] = array(
+        'title' => 'This is a callback function for an Ajax page',
+        'description' => 'Callback function for an Ajax page.',
+        'page callback' => 'caviar_commande',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['caviar/chequeout'] = array(
+        'title' => 'This is a callback function for an Ajax page',
+        'description' => 'Callback function for an Ajax page.',
+        'page callback' => 'caviar_chequeout',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['caviar/grille'] = array(
+      'title' => 'This is a callback function for an Ajax page',
+      'description' => 'Callback function for an Ajax page.',
+      'page callback' => 'caviar_grille',
+      'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+    );
+    $items['grille/postcheck'] = array(
+        'title' => 'This is a callback function for an Ajax page',
+        'description' => 'Callback function for an Ajax page.',
+        'page callback' => 'grille_postcheck',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+
+    $items['acces/utilisateur'] = array(
+        'title' => 'se logger dans drupal',
+        'description' => 'se logger dans drupal depuis dojo',
+        'page callback' => 'acces_utilisateur',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['list/users'] = array(
+        'title' => 'se logger dans drupal',
+        'description' => 'se logger dans drupal depuis dojo',
+        'page callback' => 'list_users',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['inform/utilisateur'] = array(
+        'title' => 'inform the user about his access code',
+        'description' => 'mail the user about his login and password',
+        'page callback' => 'inform_utilisateur',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['changer/redlop'] = array(
+        'title' => 'inform the user about his access code',
+        'description' => 'mail the user about his lohĝin and password',
+        'page callback' => 'changer_redlop',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['forgot/account'] = array(
+        'title' => 'send access code to user',
+        'description' => 'mail the user who forgot his data about his login and password',
+        'page callback' => 'forgot_account',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+
+    $items['create/utilisateur'] = array(
+        'title' => 'créer un utilisateur',
+        'description' => 'créer un utilisateur drupal depuis dojo',
+        'page callback' => 'create_utilisateur',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['caviar/nouvelle_note'] = array(
+        'title' => 'This is a callback function for an Ajax page',
+        'description' => 'Callback function for an Ajax page.',
+        'page callback' => 'caviar_nouvelle_note',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['cherche/idee'] = array(
+        'title' => 'search for a thought',
+        'description' => 'search fo a thought that matches the search string',
+        'page callback' => 'cherche_idee',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['allume/idee'] = array(
+        'title' => 'This is a callback function for an Ajax page',
+        'description' => 'Callback function for an Ajax page.',
+        'page callback' => 'allume_idee',
+        'theme callback' => 'ajax_base_page_theme', // Sets base theme to be the same as current page.
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+return $items;
+}
+/*
+function caviar_dojoconfig(){
+    return array(
+        'packages' => array(
+            'dojo_toolkit' => array(
+                'name' => 'dojo_toolkit',
+                'location' => drupal_get_path('module', 'dojo_toolkit') . '/js',
+            ),
+        ),
+    );
+}
+*/
+function caviar_grille()   {
+    $caviarblk = module_invoke('caviar', 'block_view', 'caviarblk');
+    print render ($caviarblk['content']);
+}
+function grille_postcheck()   {
+    $postgridblk = module_invoke('caviar', 'block_view', 'postgridblk');
+    print render ($postgridblk['content']);
+}
+
+function caviar_chequeout()   {
+    $algs=func_get_args();
+    $convives=$algs[0];
+    $args = explode("_", $algs[1]);
+    $achat = new achat();
+
+    // get the current user
+    global $user;
+    // VL150907
+    if($user->uid >0) {
+        $achat->nom_client = $user->name;
+        $achat->id_client = $user->uid;
+        $order = commerce_cart_order_load($user->uid);
+
+        $lid=$order->commerce_line_items['und'][0]['line_item_id'];
+        $lineitem=commerce_line_item_load($lid);
+        $lineitem->field_persons['und'][0]['value'] = $convives;
+        $lineitem->field_grdist['und'][0]['value'] = $algs[1];
+
+        $lineitem->data=$values;
+        //$user = user_save($user, $values);
+
+        commerce_line_item_save($lineitem);
+
+        $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+        //$order_wrapper->commerce_line_items[] = $lineitem;
+
+// Save the order again to update its line item reference field.
+        commerce_order_save($order);
+    }
+    else {              // if the user is anonymous
+        $achat->nom_client = 'anonymous';
+        $achat->produit='GRID';
+        $achat->produit_id = 6;
+        $achat->id_client = 0;
+        //uid of the ghost user
+         $uid=$user->uid;
+
+        if (!commerce_cart_order_session_exists())
+            {
+                $order = commerce_cart_order_new($uid);
+                $order->log = t("Created by checkout page.");
+                commerce_cart_order_session_save($order->order_id);
+            }
+            // Attempt to load existing order for user from session
+            $order = commerce_cart_order_load($uid);
+            $order1 = commerce_cart_order_load();
+            if(!$order){
+                $order = commerce_cart_order_new($uid);
+            }
+            if(!$order1){
+                $order1 = commerce_cart_order_new();
+            }
+
+            // Save new order to get order id
+            if(empty($order->order_id)){
+                $order->revision = FALSE;
+                commerce_order_save($order);
+            }
+            $order_id = $order->order_id;
+            // Wrapper for easy field access and adding line items, order passed by reference
+            $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+            $product= commerce_product_load($achat->produit_id);
+            $quantity=intval($convives);
+            $line_item = commerce_product_line_item_new($product, $quantity);
+            $line_item->field_persons['und'][0]['value'] = $convives;
+            $line_item->field_grdist['und'][0]['value'] = $algs[1];
+            $order_wrapper->commerce_line_items[] = $line_item;
+            commerce_line_item_save($line_item);
+            $line_item_added = commerce_cart_product_add($uid, $line_item, FALSE);
+            commerce_order_save($order);
+            $ghost=user_load_by_name('ghost');
+            $ghost->field_cavgrid['und'][0]['value']=$algs[1];
+            user_save($ghost);
+            $user=user_load(0);
+
+        // for debug purpose
+        //$testlineitem=commerce_line_item_load($line_item_added->line_item_id);
+    }
+
+
+
+
+
+// Redirect to the order's checkout form. Obviously, if this were a
+// form submit handler, you'd just set $form_state['redirect'].
+    drupal_json_output($achat);
+
+}
+/*
+function caviar_context_load_alter(&$context) {
+    if ($context->name === 'caviar_grille' && isset($context->reactions['block'])) {
+        global $user;
+        $values = array(
+            'field_cavgrid' => array(
+                LANGUAGE_NONE => array(
+                    0 => array(
+                        'value' => 'GRID'
+                    )
+                )
+            )
+        );
+        $user = user_save($user, $values);
+    }
+    if ($context->name === 'caviar_random' && isset($context->reactions['block'])) {
+        global $user;
+        $values = array(
+            'field_cavgrid' => array(
+                LANGUAGE_NONE => array(
+                    0 => array(
+                        'value' => 'RANDOM'
+                    )
+                )
+            )
+        );
+        $user = user_save($user, $values);
+    }
+}
+*/
+function get_caviar_commande()   {
+    $achat = new achat();
+    // charge les couleurs et la police de fonts
+    $myfile = fopen("http://belayaikra.ru/sites/all/modules/caviar/cavgrid.txt", "r") or die("Unable to open
+    file!");
+    $aa=fgets($myfile);
+    $achat->policechar=rtrim($aa);
+    $aa=fgets($myfile);
+    $aa=rtrim($aa);
+    $achat->couleur= explode(' ',$aa);
+    $aa=fgets($myfile);
+    $aa=rtrim($aa);
+    $achat->plat= explode(',',$aa);
+    // get the current user
+    global $user;
+    $achat->nom_client = $user->name;
+    $achat->id_client = $user->uid;
+    $orderinfo = commerce_cart_order_load($user->uid);
+
+    $account = user_load($user->uid);
+    $items = field_get_items('user', $account, 'field_cavgrid');
+
+    if ($items[0]['value'] == 'GRID') $achat->produit_id=6;
+    if ($items[0]['value'] == 'RANDOM') $achat->produit_id=7;
+
+    if ($orderinfo) {
+        commerce_cart_order_empty($orderinfo);
+        commerce_order_delete($orderinfo->order_number);
+
+    }
+    $order1 = commerce_cart_order_load($user->uid);
+    $order = commerce_order_new($user->uid, 'checkout_checkout');
+    commerce_order_save($order);
+    $product = commerce_product_load($achat->produit_id);
+    $data=array(
+        "dineurs" => "persons",
+        "plats" => "food",
+    );
+    //VL150906
+    // product is not false if the user is not anonymous
+   if ($product)  {
+       $line_item = commerce_product_line_item_new($product, 1, $order->order_id,$data,'grid');
+       commerce_line_item_save($line_item);
+       $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+       $order_wrapper->commerce_line_items[] = $line_item;
+
+// Save the order again to update its line item reference field.
+       commerce_order_save($order);
+       $achat->produit=$items[0]['value'];
+   }
+    else {
+        $achat->nom_client = 'anonymous';
+        $achat->produit='GRID';
+        $achat->produit_id = 6;
+        $achat->id_client = 0;
+
+    }
+    $achat->convives=20;
+
+
+    $achat->choix=5;
+
+    fclose($myfile);
+    return($achat);
+}
+
+function caviar_commande()   {
+    global $user;
+    $achat = get_caviar_commande();
+    drupal_json_output($achat);
+    //if ($user->name == 'ghost') $user=user_load('0');
+}
+function caviar_activer_utilisateur ($ghi = 0, $jkl = '')    {
+    $aa='salut les copains';
+    $args=func_get_args();
+    $uid=$args[0];
+    // load user object
+    global $user;
+    global $base_url;
+    $myuser = user_load($uid);
+    if(isset($myuser->uid)) {
+        $user=$myuser;
+        user_login_finalize();
+    }
+    header( 'Location: '.$base_url) ;
+
+}
+
+function caviar_page_alter(&$page) {
+  $go_ahead=FALSE;
+  if (isset($page['content']['system_main']['#id']))
+    if ($page['content']['system_main']['#id'] == 'comment-form')
+        $go_ahead=TRUE;
+  if (isset($page['content']['system_main']['comment_form']))
+    if ($page['content']['system_main']['comment_form'])
+        $go_ahead=TRUE;
+    if ($go_ahead) {  
+        unset($page['page_top']);
+        unset($page['footer']);
+        $page['#type']='block';
+        $page['#show_message']=false;
+        unset($page['content']['system_main']['author']);
+        unset($page['#theme']);
+    }
+}
+
+
+function acces_utilisateur()    {
+    $username=urldecode($_POST['username']);
+    $password=urldecode($_POST['password']);
+    // executer la fonction d'accès
+        // variable d'entrée $username et $password
+    $xhr = array();
+        if (user_authenticate($username, $password)) {
+            $user_obj = user_load_by_name($username);
+            $form_state = array();
+            $form_state['uid'] = $user_obj->uid;
+            user_login_submit(array(), $form_state);
+            $xhr['status']='success';
+            $xhr['username']=$username;
+            $xhr['uid']=$user_obj->uid;
+            $xhr['mail']=$user_obj->mail;
+            if(isset($user_obj->field_thought_id['und'][0]['value']))    {
+                $xhr['nid'] =$user_obj->field_thought_id['und'][0]['value'];
+            }   else    {
+                $xhr['nid']=0;
+            }
+            $xhr['roles']=implode($user_obj->roles,"#");
+            $xhr['message']='user ' . $username . ' is logged in.' ;
+        }
+        else {
+            $xhr['status']='failure';
+            $xhr['message']='le utilisateur est fritté et viandé.' ;
+            //return false;
+        }
+        drupal_json_output($xhr);
+}
+
+function inform_utilisateur()   {
+    // mail the user about his ogin and password
+    global $base_url;
+    $args=func_get_args();
+    $uid=$args[0];
+    $user = user_load($uid);
+    if(isset($user->field_parol['und'][0]['value']))    {
+        $pass =$user->field_parol['und'][0]['value'];
+    } else {
+        $pass = '';
+    }
+    $user = user_load($uid);
+    $usermail = $user->mail;
+    $mailsubject = 'Your account on ' . 'http://vlkey.com';
+    $mailbody = '<p>Dear '. $user->name .', </p>';
+    $mailbody .= '<p> login: '.$user->name . '</p>';
+    $mailbody .= '<p> password: '.$pass . '</p>';
+    caviar_mail('vlalieu@yandex.ru', $usermail, $mailsubject,  $mailbody);
+}
+
+function changer_redlop()   {
+    $args=func_get_args();
+    $nargs = explode("°", $args[0]);
+    $cid=$nargs[0];
+    $champ=$nargs[1];
+    $valeur=$nargs[2];
+    $contact = redhen_contact_load($cid);
+    //vl140831
+    switch ($champ) {
+        case 'redhen_contact_first_name':
+            $contact->first_name=$valeur;
+            break;
+        case 'redhen_contact_last_name':
+            $contact->last_name=$valeur;
+            break;
+        case 'city':
+            $contact->field_city['und'][0]['value']=$valeur;
+            break;
+        case 'views_php_5': //email - see view lop1
+            $contact->redhen_contact_email['und'][0]['value']=$valeur;
+            break;
+    };
+    redhen_contact_save($contact);
+}
+
+function list_users()   {
+    $xhr = array();
+    $all_users = entity_load('user');
+    foreach($all_users as $value) {
+        $user_list = (array)$value;
+        if($user_list['uid'] > 0) {
+            $object = new stdClass();
+            $object->uid = $user_list['uid'];
+            $object->name = $user_list['name'];
+            $object->mail = $user_list['mail'];
+            /*
+            $aaa = $user_list['field_city'];
+            $bbb = sizeof($aaa);
+            if($bbb > 0)  $object->city=$user_list['field_city']['und'][0]['value'];
+                else $object->city='';
+            */
+            $xhr[] = $object;
+        }
+    }
+    drupal_json_output($xhr);
+}
+function forgot_account()   {
+
+    global $base_url;
+    if (sizeof($_POST) > 0) {
+        // function is called from forgotAccount.js
+        $email=urldecode($_POST['email']);
+        $user = user_load_by_mail($email);
+        $xhr = array();
+        if ($user)  {
+            // mail the user about his ogin and password
+            $xhr['status']='success';
+            $xhr['email']=$email;
+           }    else    {
+            $xhr['status']='failure';
+            $xhr['email']=$email;
+        }
+        drupal_json_output($xhr);
+        } else {
+            $nargs = func_num_args();
+            // functions is called from nodejs server
+            if ($nargs > 0 ) {
+                $args=func_get_args();
+                $email = $args[0];
+                $user = user_load_by_mail($email);
+                global $base_url;
+                if(isset($user->field_parol['und'][0]['value']))    {
+                    $pass =$user->field_parol['und'][0]['value'];
+                } else {
+                    $pass = '';
+                }
+                $usermail = $user->mail;
+                $mailsubject = 'Your account on ' . $base_url;
+                $mailbody = '<p>Dear '. $user->name .', </p>';
+                $mailbody .= '<p> login: '.$user->name . '</p>';
+                $mailbody .= '<p> password: '.$pass . '</p>';
+                caviar_mail('vlalieu@yandex.ru', $usermail, $mailsubject,  $mailbody);
+                }
+            }
+}
+function create_utilisateur()    {
+     if (sizeof($_POST) > 0) {
+        $username=urldecode($_POST['username']);
+        $password=urldecode($_POST['password']);
+        $email=urldecode($_POST['email']);
+
+        // executer la fonction d'accès
+        // variable d'entrée $username et $password
+        $new_user = array(
+            'name' => $username,
+            'pass' => $password,
+            'mail' => $email,
+            'status' => 1,
+            'access' => REQUEST_TIME,
+            'roles' => array(), // No other roles than Authenticated
+            //'roles' => array('10' => '10', '11' => '11'), // If you want to specify additional roles, the numbers are role_id's
+        );
+        user_save(NULL, $new_user);
+
+        $xhr = array();
+        if (user_authenticate($username, $password)) {
+            $user_obj = user_load_by_name($username);
+            // store the unhashed password
+            $user_obj->field_parol['und'][0]['value']=$password;
+            user_save($user_obj);
+            $form_state = array();
+            $form_state['uid'] = $user_obj->uid;
+            user_login_submit(array(), $form_state);
+            $xhr['status']='success';
+            $xhr['username']=$username;
+            $xhr['password']=$password;
+            $xhr['uid']=$user_obj->uid;
+            $xhr['mail']=$user_obj->mail;
+            $xhr['roles']=implode($user_obj->roles,"#");
+            $xhr['message']='user ' . $username . ' is logged in.' ;
+
+        }
+        else {
+            $xhr['status']='failure';
+            $xhr['message']='le utilisateur est fritté et viandé.' ;
+            //return false;
+        }
+        drupal_json_output($xhr);
+    }
+
+}
+
+function create_thought()  {
+    // areguments $parentid,$titre
+    $algs=func_get_args();
+    $args = explode("__", $algs[0]);
+    $parentid=(int)$args[0];
+    $uid=(int)$args[1];
+    if (sizeof($_POST) > 0) {
+    // tâche: relier C[1..N] à C[0]
+    global $user;
+    $titre=$args[2]; // urldecode
+    $postedthings=$_POST;
+        $summary=urldecode($_POST['ideebody']);
+    if(strlen($titre) > 6)  {
+        $titre=urldecode($titre);
+        $node = new stdClass();
+        $node->type = 'thought';
+        $node->title = $titre;
+        $node->language = LANGUAGE_NONE;
+        $node->uid = $uid;
+        node_object_prepare($node);
+        $node->status = 1;
+        $node->promote = 1;
+        $node->body[$node->language][0]['value'] = $summary;
+        $node->body[$node->language][0]['format'] = 'html';
+        $node->field_type[$node->language][0]['value'] = $_POST['type'];
+        $node = node_submit($node);
+        $floatid = 'floatcheck'.$args[4];
+        if(isset($_POST['floatcheck'])) $node->field_isfloating[$node->language][0]['value'] = '1';
+        node_save($node);
+        $node->uid=$uid;
+        $node->field_superbulle = ['und' => []];
+        array_push($node->field_superbulle['und'],['nid' => $parentid]);
+        node_save($node);
+        $pere=node_load($parentid); // to set the sousbulle apreès création du noeud
+        $is_it_there=array_key_exists('und',$pere->field_sousbulle);
+        if (!$is_it_there) {
+            $pere->field_sousbulle = ['und' => []];
+        }
+        array_push($pere->field_sousbulle['und'],['nid' => $node->nid]);
+        node_save($pere);
+
+        $xhr = array();
+        $xhr['status']='success';
+        $xhr['message']='Node '.$titre.' is created as a child node of node: '.$pere->title ;
+        $xhr['titre']= $pere->title;
+        $xhr['nid']= $pere->nid;
+        drupal_json_output($xhr);
+        }
+    }
+}
+function allume_idee($node=NULL,$noeudid=NULL,$rootnode=NULL) {
+// va retourner un objet JSON a la requête d3.xhr effectuée depuis ideogram nodejs.js
+    // $idnode peut venir soit de $noeud (appel interne) soit du path appel depuis javascript
+    class idee {
+        // Creating some properties (variables tied to an object)
+        public $title;
+        public $nid;
+        public $rel; // tmp
+        public $bourgeons; // is this node a parent of other nodes
+        public $floating; // noeud flottant ou relié
+        public $px,$py;
+        public $gfx;
+        public $urlpath;
+        public $color;
+        public $imga;
+        public $imgback;
+        public $relname;
+        public $spacial;
+        public $child = array();
+        public $friend = array(); // array of related cell id
+    };
+
+    $has_childs=false;
+
+        if (!is_null($noeudid))    {
+            $args = explode("_", $noeudid);
+            $idnode=(int)$args[0];
+            $uid=(int)$args[1];
+        }
+        else    {
+            $algs=func_get_args();
+            $args = explode("_", $algs[1]);
+            $idnode=(int)$args[0];
+            $uid=(int)$args[1];
+        }
+        $user = user_load($uid);
+        if ($idnode == 0) {
+            if(isset($user->field_thought_id['und'][0]['value']))    {
+                $idnode =$user->field_thought_id['und'][0]['value'];
+            }   else    {
+                $idnode=1332;
+            }
+        }   else    {
+            $user->field_thought_id['und'][0]['value']=$idnode;
+        }
+
+
+        user_save($user);
+        $_SESSION['ref_thought']['#value'] = $idnode;
+        $node = node_load($idnode);
+        if ($node)  {
+            $xhr = array();
+            $childs = array();
+            $friend = array(); // array of related cell id
+
+            if (isset($node->field_sousbulle['und']))  {
+              if (sizeof($node->field_sousbulle['und']) > 0) {
+                  $has_childs=true;
+              }
+            }
+            if(!$has_childs)    {
+                $idnode=$node->field_superbulle['und'][0];
+                $node = node_load($idnode);
+                }
+            $idea = new idee();
+            $xhr['idea']=$idea;
+            $nids = array();
+
+            $idea->nid=$node->nid;
+            $nids[]=$idea->nid;
+            $idea->title=$node->title;
+            $idea->bourgeons=true;
+            $idea->floating=0;
+            $idea->px=0;
+            $idea->py=0;
+            if(sizeof($node->field_gfx) > 0) {
+                $idea->gfx=trim($node->field_gfx['und'][0]['value']);
+            }
+
+            if(sizeof($node->field_textpath) > 0) {
+                $idea->urlpath = urlencode(trim($node->field_textpath["und"][0]["value"]));
+             }
+            // image associated to the object idea
+            if(sizeof($node->field_imga) > 0) {
+                $sid=(int)$node->field_imga['und'][0]['sid'];
+                $q23 = db_select('scald_atoms', 's')
+                    ->condition('s.sid', $sid,'=');
+                $q23->fields('s',array('title','sid'));
+
+                $r23 = $q23->execute();
+                while($rec = $r23->fetchAssoc()) {
+                    $idea->imga=$rec['title'];
+                }
+            }
+            if(sizeof($node->field_backimg) > 0) {
+                $sid=(int)$node->field_backimg['und'][0]['sid'];
+                $q23 = db_select('scald_atoms', 's')
+                    ->condition('s.sid', $sid,'=');
+                $q23->fields('s',array('title','sid'));
+
+                $r23 = $q23->execute();
+                while($rec = $r23->fetchAssoc()) {
+                    $idea->imgback= $rec['title'];
+                }
+            }
+            if(sizeof($node->field_spacial_organizer) > 0) $idea->spacial= trim($node->field_spacial_organizer['und'][0]['value']);
+            else $idea->spacial='ellipsoid';
+
+            /*
+             * Check  for the relations
+             * store the query result in $friend array
+             *
+            */
+            $query = db_select('relation', 'r')
+                ->condition('relation_type', 'is_linked_with','=');
+            $query->fields('r',array('rid'));
+            $result = $query->execute();
+            while($record = $result->fetchAssoc()) {
+                $rel = relation_load($record['rid']);
+                if ((int)$rel->endpoints['und'][0]['entity_id'] == $idnode) {
+                    $fid=(int)$rel->endpoints['und'][1]['entity_id'];
+                    $friend[] = $fid;
+                    $childs[$fid]= new idee();
+                }
+            }
+            if (isset($node->field_sousbulle['und']))  {
+                foreach($node->field_sousbulle['und'] as $xxx) {
+                    // Exclure les sous bulles qui sont des friends
+                    if (!in_array($xxx['nid'], $friend)) {
+                        $bulles_id[] = $xxx['nid'];
+                    }
+                }
+                $query = db_select('node', 'n')
+                    ->condition('type', 'thought','=')
+                    ->condition('nid', ($bulles_id), 'IN');
+                $query->fields('n',array('title','nid'));
+                $result = $query->execute();
+                while($record = $result->fetchAssoc()) {
+                    // les noeuds childs
+                    $id=$record['nid'];
+                    $child = new idee();
+                    $childs[$id]= $child;
+
+                    $child->title= $record['title'];
+                    $child->nid= $record['nid'];
+                    $nids[]= $child->nid;
+                    $child->rel='child';
+                    }
+
+
+                if (isset($node->field_superbulle['und']))  {
+                    foreach($node->field_superbulle['und'] as $pp)  {
+                        $parent_id[]=$pp['nid'];
+                        }
+                    $query = db_select('node', 'n')
+                        ->condition('type', 'thought','=')
+                        ->condition('nid', ($parent_id), 'IN');
+                    $query->fields('n',array('title','nid'));
+
+                    $result = $query->execute();
+                    while($record = $result->fetchAssoc()) {
+                        $id=$record['nid'];
+                        $parent = new idee();
+                        $childs[$id]= $parent;
+                        $parent->title= $record['title'];
+                        $parent->nid= $record['nid'];
+                        $nids[]=$parent->nid;
+                        $parent->rel='parent';
+                    }
+                 }
+                 //** Assign Childs array to child */
+                $idea->child=$childs;
+                 // Pour avoir les bulles qui contiennent des sous-bulles:
+                    $q21 = db_select('field_data_field_sousbulle', 's')
+                        ->condition('bundle', 'thought','=')
+                        ->condition('entity_id', ($nids), 'IN');
+                    $q21->fields('s',array('entity_id'))->distinct();
+                    $r21 = $q21->execute();
+                    while($rec = $r21->fetchAssoc()) {
+                        $id = $rec['entity_id'];
+                        $childs[$id]->bourgeons=true;
+                        $bourgeon[] = $rec['entity_id'];
+                    }
+                // Pour avoir les bulles flottantes:
+                $q22 = db_select('field_data_field_isfloating', 'f')
+                    ->condition('bundle', 'thought','=')
+                    ->condition('field_isfloating_value', '1','=')
+                    ->condition('entity_id', ($nids), 'IN');
+                $q22->fields('f',array('entity_id'))->distinct();
+                $r22 = $q22->execute();
+                $floating=array();
+                while($rec = $r22->fetchAssoc()) {
+                    $id = $rec['entity_id'];
+                    $childs[$id]->floating=true;
+                    $floating[] = $rec['entity_id'];
+                }
+                foreach ($childs as $nid => $bul) {
+
+                //for($k=1; $k < sizeof($childs); $k++) {
+                    $cell = node_load($nid);
+                    if(sizeof($cell->field_px) > 0) {
+                        $childs[$nid]->px= $cell->field_px['und'][0]['value'];
+                    }
+                    if(sizeof($cell->field_py) > 0) {
+                        $childs[$nid]->py= $cell->field_py['und'][0]['value'];
+                    }
+                    if(sizeof($cell->field_gfx) > 0) {
+                        $childs[$nid]->gfx=trim($cell->field_gfx["und"][0]["value"]);
+                    }
+                    if(sizeof($cell->field_textpath) > 0) {
+                        $childs[$nid]->urlpath=urlencode(trim($cell->field_textpath["und"][0]["value"]));
+                    }
+                    if(sizeof($cell->field_color) > 0) {
+                        $childs[$nid]->color= $cell->field_color['und'][0]['value'];
+                    }
+                    if(sizeof($cell->field_spacial_organizer) > 0) $childs[$nid]->spacial= trim($node->field_spacial_organizer['und'][0]['value']);
+                    else $childs[$nid]->spacial='ellipsoid';
+
+                    if(sizeof($cell->field_imga) > 0) {
+                        $sid=(int)$cell->field_imga['und'][0]['sid'];
+                        $q23 = db_select('scald_atoms', 's')
+                            ->condition('s.sid', $sid,'=');
+                        $q23->fields('s',array('title','sid'));
+
+                        $r23 = $q23->execute();
+                        while($rec = $r23->fetchAssoc()) {
+                            $childs[$nid]->imga=$rec['title'];
+                        }
+                    }
+                    if(sizeof($cell->field_backimg) > 0) {
+                        $sid=(int)$cell->field_backimg['und'][0]['sid'];
+                        $q23 = db_select('scald_atoms', 's')
+                            ->condition('s.sid', $sid,'=');
+                        $q23->fields('s',array('title','sid'));
+
+                        $r23 = $q23->execute();
+                        while($rec = $r23->fetchAssoc()) {
+                            $childs[$nid]->imgback = $rec['title'];
+                        }
+                    }
+                }
+/*
+ * Check  for the relations
+ * store the query result in $friends
+ *
+*/
+     $query = db_select('relation', 'r')
+        ->condition('relation_type', 'is_linked_with','=');
+    $query->fields('r',array('rid'));
+    $result = $query->execute();
+    while($record = $result->fetchAssoc()) {
+        $rel=relation_load($record['rid']);
+        if((int)$rel->endpoints['und'][0]['entity_id']==$idnode)   {
+            $drugid=(int)$rel->endpoints['und'][1]['entity_id'];
+            $drug=node_load($drugid);
+            $childs[$drugid]->title= $drug->title;
+            $childs[$drugid]->nid= $drugid;
+            $childs[$drugid]->rel='friend';
+            if (sizeof($rel->field_relname) > 0) {
+                $childs[$drugid]->relname= $rel->field_relname['und'][0]['value'];
+            }
+            if(sizeof($drug->field_imga) > 0) {
+                $sid=(int)$drug->field_imga['und'][0]['sid'];
+                $q23 = db_select('scald_atoms', 's')
+                    ->condition('s.sid', $sid,'=');
+                $q23->fields('s',array('title','sid'));
+
+                $r23 = $q23->execute();
+                while($rec = $r23->fetchAssoc()) {
+                    $childs[$drugid]->imga= $rec['title'];
+                }
+            }
+            if(sizeof($drug->field_px) > 0) {
+                $childs[$drugid]->px=$drug->field_px['und'][0]['value'];
+            }
+             if(sizeof($drug->field_py) > 0) {
+                $childs[$drugid]->py=$drug->field_py['und'][0]['value'];
+            }
+            if(sizeof($drug->field_textpath) > 0) {
+                $childs[$drugid]->urlpath=urlencode(trim($drug->field_textpath["und"][0]["value"]));
+            }
+        }
+        if((int)$rel->endpoints['und'][1]['entity_id']==$idnode)   {
+            $drugid=(int)$rel->endpoints['und'][1]['entity_id'];
+            $drug=node_load($drugid);
+            $childs[$drugid]->title= $drug->title;
+            $childs[$drugid]->nid= $drugid;
+            $childs[$drugid]->rel='friend';
+            if(sizeof($drug->field_px) > 0) {
+                $childs[$drugid]->px=$drug->field_px['und'][0]['value'];
+            }
+            if(sizeof($drug->field_py) > 0) {
+                $childs[$drugid]->py=$drug->field_py['und'][0]['value'];
+            }
+            if(sizeof($drug->field_textpath) > 0) {
+                $childs[$drugid]->urlpath=urlencode(trim($drug->field_textpath["und"][0]["value"]));
+            }
+        }
+    }
+                drupal_json_output($xhr);
+                }
+        }
+}
+/*
+function caviar_commerce_line_item_type_info_alter(&$line_item_types) {
+    if (!empty($line_item_types['grid'])) {
+        $line_item_types['grid']['persons'] = 22;
+
+        // The add_form_submit_value is only used on the order page.
+        //$line_item_types['product']['add_form_submit_value'] = t('Buy it now!');
+    }
+}
+*/
+function caviar_form_alter(&$form, $form_state, $form_id) {
+    global $user;
+    switch ($form_id) {
+        case 'commerce_checkout_form_checkout':
+            //$user_data = user_load($user->uid);
+            if ($user->uid > 0) {
+                    $order = commerce_cart_order_load($user->uid);
+                    $eid=end($order->commerce_line_items['und']);
+                    $lid=$eid['line_item_id'];
+                    $lineitem=commerce_line_item_load($lid);
+                    $keus = explode('_', $lineitem->field_grdist['und'][0]['value']);
+                }
+                else {
+                    //VL150908 traitement de user anonymous du a  impossibilite de
+                    // conserver lineiems customs fields for anaonymous user
+                    $order = commerce_cart_order_load(); //ghost
+                    $ghost=user_load_by_name('ghost');
+                    $cavgrid=$ghost->field_cavgrid['und'][0]['value'];
+                    $user=user_load(0);
+                    $eid=end($order->commerce_line_items['und']);
+                    $lid=$eid['line_item_id'];
+                    $lineitem=commerce_line_item_load($lid);
+                    $keus = explode('_', $cavgrid);
+                }
+
+            $qty = intval($lineitem->quantity);
+            if ($lineitem->line_item_label == 'GRID' || $lineitem->line_item_label == 'RANDOM') {
+                $uu = strpos($form['cart_contents']['cart_contents_view']['#markup'], 'detailgrille');
+                $myfile = fopen("http://belayaikra.ru/sites/all/modules/caviar/cavgrid.txt", "r") or die("Unable to open
+    file!");
+                $aa = fgets($myfile);
+                $aa = fgets($myfile);
+                $aa = fgets($myfile);
+                $aa = rtrim($aa);
+                $plats = explode(',', $aa);
+                $aa = fgets($myfile);
+                $aa = fgets($myfile);
+                $aa = rtrim($aa);
+                $jours = explode(',', $aa);
+
+                $choix = array();
+
+                for ($i = 0; $i < sizeof($plats); $i++) {
+                    $choix[] = explode(',', $keus[$i]);
+                }
+                $grid = '<table  class="footable"><thead><tr><th  colspan="6">Продукт: ';
+                $grid.=  $lineitem->line_item_label.', Люди: '.$qty. '</th></tr></thead></table>';
+                $grid.= '<table  class="footable"><thead><tr><th></th>';
+                for ($k = 0; $k < sizeof($plats); $k++) {
+                    $grid .= '<Th>' . $plats[$k] . '</th>';
+                }
+                $grid .= '</tr></thead><tbody>';
+
+                for ($j = 0; $j < 5; $j++) {
+                    $grid .= '<TR>';
+                    $grid .= '<Td>' . $jours[$j] . '</td>';
+                    for ($k = 0; $k < sizeof($plats); $k++) {
+                        $grid .= '<Td>' . $choix[$j][$k] . '</td>';
+                    }
+                    $grid .= '</TR>';
+                }
+
+                $grid .= '</tbody></table>';
+                if ($uu == false) $form['cart_contents']['cart_contents_view']['#markup'] .= '<div id="detailgrille">'
+                    . $grid . '</div>';
+
+            }
+            break;
+        case 'user_login_block':
+            // si on voulait cha$user_datanget le form de login :)
+            break;
+        case 'comment_node_thought_form':
+            $form_state['redirect'] = 'node/' . $_SESSION['ref_thought']['#value'] ;
+            $form['comment_body']['und'][0]['#title'] = 'comment ' . $form['#node']->title;
+            $form['comment_body']['und']['#title'] = 'comment ' . $form['#node']->title;
+            $form['comment_body']['und'][0]['value']['#title'] = 'comment ' . $form['#node']->title;
+        //unset($form['#node']);
+        //unset($form['#action']);
+        //$form['#action'] = 'caviar/affiche_commentaires/' . $form['#node']->nid;
+        unset($form['#submit'][0]);
+        unset($form['#submit']);
+        //$form['#submit'][0] = 'caviar_thought_comment_form_submit';
+            // cette modif n'a aucun effet
+        // faire en sorte que ajax soit inclu si form est construit dynamiquement
+        $form['actions']['submit']['#ajax'] = array(
+                'callback' => 'affiche_notes_idee',
+                'wrapper' => 'ideelistnotes',
+                'method' => 'html',
+                'effect' => 'none',
+            );
+       $form['actions']['submit']['#executes_submit_callback'] = true;
+        break;
+    }
+}
+function caviar_mail($from = 'default_from', $to, $subject, $message) {
+    $my_module = 'caviar';
+    $my_mail_token = microtime();
+    if ($from == 'default_from') {
+        // Change this to your own default 'from' email address.
+        $from = variable_get('system_mail', 'admin@yoursite.com');
+    }
+    $message = array(
+        'id' => $my_module . '_' . $my_mail_token,
+        'to' => $to,
+        'subject' => $subject,
+        'body' => array($message),
+        'headers' => array(
+            'From' => $from,
+            'Sender' => $from,
+            'Return-Path' => $from,
+        ),
+    );
+    $system = drupal_mail_system($my_module, $my_mail_token);
+    $message = $system->format($message);
+    if ($system->mail($message)) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+function caviar_block_info() {
+    $blocks = array();
+    $blocks['caviarblk'] = array(
+        'info' => t('grille_caviar'),
+    );
+    $blocks['randomblk'] = array(
+        'info' => t('random_caviar'),
+    );
+    $blocks['postgridblk'] = array(
+        'info' => t('apres_grille'),
+    );
+    return $blocks;
+}
+
+function caviar_block_info_alter(&$blocks, $theme, $code_blocks) {
+    if (!path_is_admin(current_path())) {
+        if (isset($blocks['caviar']['caviarblk'])) {
+            $blocks['caviar']['caviarblk']['status'] = 1;
+            $blocks['caviar']['caviarblk']['region'] = 'Content';
+            $blocks['caviar']['caviarblk']['weight'] = 2;
+            $blocks['caviar']['caviarblk']['visibility'] = BLOCK_VISIBILITY_LISTED;
+            $blocks['caviar']['caviarblk']['pages'] = '<front>';
+        }
+        if (isset($blocks['caviar']['randomblk'])) {
+            $blocks['caviar']['randomblk']['status'] = 1;
+            $blocks['caviar']['randomblk']['region'] = 'Content';
+            $blocks['caviar']['randomblk']['weight'] = 2;
+            $blocks['caviar']['randomblk']['visibility'] = BLOCK_VISIBILITY_LISTED;
+            $blocks['caviar']['randomblk']['pages'] = '<front>';
+        }
+        if (isset($blocks['caviar']['postgridblk'])) {
+            $blocks['caviar']['postgridblk']['status'] = 1;
+            $blocks['caviar']['postgridblk']['region'] = 'Content';
+            $blocks['caviar']['postgridblk']['weight'] = 2;
+            $blocks['caviar']['postgridblk']['visibility'] = BLOCK_VISIBILITY_LISTED;
+            $blocks['caviar']['postgridblk']['pages'] = '<front>';
+        }
+    }
+}
+
+function caviar_block_view($delta = '') {
+    // The $delta parameter tells us which block is being requested.
+    global $user;
+    global $base_url;
+    $block = array();
+    switch ($delta) {
+
+        case 'caviarblk':
+            $values = array(
+                'field_cavgrid' => array(
+                    LANGUAGE_NONE => array(
+                        0 => array(
+                            'value' => 'GRID'
+                        )
+                    )
+                )
+            );
+            //si anonymous VL150906 associer anonymous avec l'utilisateur fourre tout Ghost
+            if ($user->uid == 0)   {
+                drupal_session_start();
+            }
+             else {
+                $user = user_save($user, $values);
+            }
+
+            $content="<html><head><script>
+function mkifrm() {
+ifrm = document.createElement('iframe')
+ifrm.setAttribute('id', 'ifrm')
+var el = document.getElementById('monmarker');
+while (el.hasChildNodes()) {
+    el.removeChild(el.lastChild);
+}
+el.appendChild(ifrm);
+
+ifrm.setAttribute('src', 'http://belayaikra.ru/sites/all/modules/caviar/dojapp/dojogrid.html')
+var attribs= 'width: '+window.innerWidth*0.65+'px; height: '+window.innerHeight+'px; scrolling:no;'
+ifrm.setAttribute('style',attribs)
+}
+</script></head><body onload='mkifrm()' onresize='mkifrm()'><div id='monmarker'></div></body></html>";
+            //           $content='<iframe id="iframeid" name="webbrain" style="width: 100%; height: 100%;"
+// src="http://belayaikra.ru/sites/all/modules/caviar/dojapp/dojogrid.html"></iframe>';
+            $block = array(
+                'subject' => t('grid for order'),
+                'content' => array(
+                    '#markup' =>  $content,
+                ));
+            break;
+        case 'randomblk':
+            $values = array(
+                'field_cavgrid' => array(
+                    LANGUAGE_NONE => array(
+                        0 => array(
+                            'value' => 'RANDOM'
+                        )
+                    )
+                )
+            );
+            $user = user_save($user, $values);
+
+            $content="<html><head><script>
+function mkifrm() {
+ifrm = document.createElement('iframe')
+ifrm.setAttribute('id', 'ifrm')
+var el = document.getElementById('monmarker');
+while (el.hasChildNodes()) {
+    el.removeChild(el.lastChild);
+}
+el.appendChild(ifrm);
+
+ifrm.setAttribute('src', 'http://belayaikra.ru/sites/all/modules/caviar/dojapp/dojogrid.html')
+var attribs= 'width: '+window.innerWidth*0.65+'px; height: '+window.innerHeight+'px; scrolling:no;'
+ifrm.setAttribute('style',attribs)
+}
+</script></head><body onload='mkifrm()' onresize='mkifrm()'><div id='monmarker'></div></body></html>";
+ //           $content='<iframe id="iframeid" name="webbrain" style="width: 100%; height: 100%;"
+// src="http://belayaikra.ru/sites/all/modules/caviar/dojapp/dojogrid.html"></iframe>';
+            $block = array(
+                'subject' => t('grid for order'),
+                'content' => array(
+                    '#markup' =>  $content,
+                ));
+            break;
+
+        case 'postgridblk':
+            $achat = get_caviar_commande();
+                $content='<div id="postgridblk" height:640px width:100%>'.
+                    '<h2>Your command</h2>'.
+                    '<p>Name: '. $achat->nom_client.'</p>'.
+                    '<p>Product: '. $achat->produit.'</p>'.
+                    '<p>Quantity: '. $achat->nom_client.'</p>'.
+                    '<p>Detail: '. $achat->detail.'</p>'.
+                    '</div>';
+             $block = array(
+                'subject' => t('your command'),
+                'content' => array(
+                    '#markup' => $content,
+                ),);
+            break;
+        case 'uuuuu':
+            $block['subject'] = t('Timeline');
+            $block['content'] = array(
+                '#type' => 'markup',
+                '#markup' => '<div id="nodeGantt"></div>',
+                '#attached' => array(
+                    'css' => array(
+                        'sites/all/libraries/dojo/dgrid/css/dgrid.css' => 'external',
+                        'sites/all/libraries/dojo/dgrid/css/skins/claro.css' => 'external',
+                    ),
+                    'dojo_toolkit_require' => array(
+                        array('dojo/store/JsonRest', 'JsonRest'),
+                        array('itech/GanttGrid', 'GanttGrid'),
+                    ),
+                    'dojo_toolkit_addonload' => array(
+                        array("
+                 var store=new JsonRest({
+                      target: '/activity-task-data',
+                      idProperty: 'nid'
+                    });
+                    var gantt = new GanttGrid({
+                      store: store,
+                      columns: {
+                        'title': 'Title',
+                        start_date: 'Start Date',
+                        end_date: 'End Date',
+                        'content-type': 'Content Type',
+                        'status': 'Status',
+                        'User': 'User'
+                      }
+                    }, 'nodeGantt');
+                    gantt.startup();
+            "),
+                    ),
+                )
+            );
+            dojo_toolkit_load_dojo();
+            break;
+    }
+    return $block;
+}
