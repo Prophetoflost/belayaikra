@@ -1,6 +1,9 @@
+When accessing the server belayaikra.ru with SSH with the login caviar
+enter the passowrd
+type: sudo su <enter> type the password
 create the backup:
-./backupcaviar.sh
-this creates a backup file in the folder /home/backups/backup-2015-09-14-08:41:01.tar.gz
+type: ./backupcaviar.sh <enter>
+This creates a backup file in the folder /home/backups/backup-2015-09-14-08:41:01.tar.gz
 Locally on the newly intalled server or on your computer:
 where are installed the following: PHP5, Apache2 and PostGreSQL (version 9.2 or more recent) 
 cd /tmp
