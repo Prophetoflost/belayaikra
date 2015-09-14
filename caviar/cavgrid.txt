@@ -1,0 +1,7 @@
+belayaikra
+#014F10 #4b8fe4 #f2f2f0 #9a9a9a #f5f5f5 #6ca0dc
+Рис,Гречка,Манный,Пшено,Овсянка
+Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday
+понедельник,вторник,среда,четверг,пятница,суббота,воскресенье
+
+

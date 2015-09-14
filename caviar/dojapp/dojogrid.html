@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://belayaikra.ru/sites/all/libraries/dojo/dijit/themes/claro/claro.css" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- load Dojo -->
+    <script src="/sites/all/libraries/dojo/dojox/mobile/deviceTheme.js"></script>
+    <script src='/sites/all/libraries/dojo/dojo/dojo.js'
+            data-dojo-config='async: true, parseOnLoad: true'></script>
+</head>
+<body>
+<script>
+    var surface = null;
+    // bug with window.innerWidth - so we use document.body , donc  obligatoire d avoir un body
+    // pour la hauter on prend window.innerHeight
+    var hauteur = parseInt(window.innerHeight);
+    var largeur = parseInt(document.body.clientWidth);
+    console.log(largeur,hauteur)
+    //console.log('innerwidth:'+window.innerWidth)
+    //alert("After this alert, the value will change.");
+    //console.log('innerwidth after alert:'+window.innerWidth)
+    var meal= new Array();
+    var conup= [];
+    var condown= [];
+    var nchoix=5;
+    var totJour=[];
+    var semaine =[];
+    var convives = 24;
+    var nItems =[];
+    var inputMode=false;
+    var thisTime =0, keyTime=0;
+    var checkoutBox=null;
+    var Plats = []
+    var chiffre ='';
+    var jours = 5;
+    var choix = 0;
+    var seuil=0;
+    var reste =0;
+    var dd,tt;
+    //var jour = ['Monday','Thuesday','Wednesday','Thursday','Friday','Saturday'];
+    var jour = ['понедельник','вторник','среда','четверг','пятница','субота'];
+    var joursem = new Array();
+    var jourwheel = new Array();
+    var MenuWheel = new Array()
+    var MenuPlats = new Array()
+    var jourbut = new Array();
+    var chxInt =new Array();
+    var slotId =new Array();
+    var detail = new Array();
+    var useDetail=false;
+    var debugStr=
+            '?start_debug=1&send_sess_end=1&debug_start_session=1&debug_session_id=17728&debug_port=10137&debug_host=127.0.1.1%2C127.0.0.1';
+    var urlcommande = 'http://belayaikra.ru/caviar/commande'+debugStr;
+
+    require(['dojo/has', 'dojo/sniff'], function(has){
+        if(has('jenesaispasqoui')){
+            // redirect on dojogridmobile.html
+            window.top.location.href = "http://belayaikra.ru/sites/all/dojapp/dojogridmobile.html";
+        }
+        else {
+
+            require([
+                'dojo/dom',
+                'dojo/keys',
+                'dojo/dom-construct',
+                'dojo/request/xhr',
+                'dojox/gfx',
+                'dojo/on',
+                'dojo/touch',
+                'xstyle/css!../../all/dojapp/cavgrid.css',
+                'dojo/domReady!'
+            ], function (dom,keys,domConstruct,xhr,gfx,on,touch) {
+                surface = gfx.createSurface('caviar', largeur*0.98, hauteur*0.92);
+
+                checkoutBox=surface.createGroup();
+                xhr.get(urlcommande, {
+                    handleAs: "json"
+                }).then(function(komand){
+                    //console.log( 'height: ' + ecranhauteur + ' width: ' + ecranlargeur)
+                    // Do something with the handled data
+                    // var xxx = resp.quantity
+                    // problem with quantity provided by drupal
+                    if (komand.convives) convives=komand.convives;
+                    else convives=20;
+                    if (komand.detail.length > 0) {
+                        var total =0
+                        var det1 = komand.detail.split('_')
+                        for (var r = 0 ; r < det1.length; r++)   {
+                            detail[r]=det1[r].split(',');
+                            total += detail[r].reduce(function(a, b) {
+                                return parseInt(a) + parseInt(b);
+                            });
+                        }
+                        var aa=  parseInt(5*convives)
+                       if (total != aa) useDetail=false
+                    }
+
+
+                    var dx=largeur/(2.0*nchoix);
+                    var dy=hauteur/(4*jours);
+                    var fs= largeur/90
+
+                    var fontsize =  fs.roundUsing(Math.ceil, 0).toString()+'pt'
+                    var x =dx*2;
+                    var y= 1.2*dy;
+                    /*
+                    var plats = surface.createGroup();
+                    for (var i = 0; i < 5; i++) {
+                        plats.createCircle({ cx: x+0.5*dx, cy: y+dy/2, r:dx*0.5 })
+                                .setFill(komand.couleur[2])
+                                .setStroke(komand.couleur[2]);
+
+                        plats.createTextPath({text: "TextPath!"})
+                                .moveTo(x, y+3.5*dy)
+                                .lineTo(x+2*dx,y+3.5*dy)
+                                .setFont({ family: komand.policechar, size: fontsize, weight: "normal" })
+                                .setFill(komand.couleur[0])
+                                .setText(komand.plat[i]);
+
+                        x += 1.5 * dx
+                    }
+                    */
+                    x =dx*0.2;
+                    //y = y+4.5*dy;
+                    //var couleur = ['#417fcb','#4b8fe4','#b8d0ec','#e7e4e5','#f5f5f5','#6ca0dc'];
+                    surface.createRect({x: x, y: y, width: dx*1.8, height: dy *1})
+                            .setFill(komand.couleur[0])
+                            .setStroke(komand.couleur[0]);
+                    surface.createTextPath({text: "TextPath!"})
+                            .moveTo(x+0.60*dx,  y+0.6*dy)
+                            .lineTo(x+1.95*dx,y+0.6*dy)
+                            .setFont({ family: komand.policechar, size: fontsize, weight: "bold" })
+                            .setFill("white")
+                            .setText('ИТОГО ЛЮДИ');
+                    var eaterBox=surface.createGroup();
+                    eaterBox.createRect({x: x+0.02*dx, y: y+dy*0.1, width: dx*0.55, height: dy *.8})
+                            .setFill('white')
+                            .setStroke('white');
+                    eaterBox.createTextPath({text: "TextPath!"})
+                            .moveTo(x+0.15*dx,  y+0.6*dy)
+                            .lineTo(x+0.6*dx,  y+0.6*dy)
+                            .setFont({ family: komand.policechar, size: fontsize, weight: "normal" })
+                            .setFill("black")
+                            .setText( parseInt(convives).toString());
+                    y= y+0.7*dy;
+                    x =2*dx;
+                    choix= convives /nchoix;
+                    var dji=0
+                    for (var j=0; j<jours; j++) {
+                        chxInt[j] = new Array(nchoix)
+                        semaine[j] = surface.createGroup();
+
+                        nItems[j]=0;
+                        x = dx;
+                        y +=1.6*dy;
+                        totJour[j] = semaine[j].createGroup();
+                        totJour[j].createCircle({ cx: nchoix*1.8*dx, cy: y+0.5*dy, r:dy*0.5 })
+                                .setFill('white')
+                                .setStroke(komand.couleur[2]);
+                        var conviveStr=convives.toString();
+                        totJour[j].createTextPath({text: "TextPath!"})
+                                .moveTo(nchoix*1.8*dx-dx*0.1, y+(dy*0.6))
+                                .lineTo(nchoix*1.8*dx+dx*0.3,y+(dy*0.6))
+                                .setFont({ family: komand.policechar, size: fontsize, weight: "normal" })
+                                .setFill(komand.couleur[2])
+                                .setText(nItems[j].toString());
+
+                        var jourtext = semaine[j].createTextPath({text: "TextPath!"})
+                                .moveTo(dx*0.2, y+dy*0.6)
+                                .lineTo(x+dx,y+dy*0.6)
+                                .setFont({ family: komand.policechar, size: fontsize, weight: "bold" })
+                                .setFill(komand.couleur[3])
+                                .setText(jour[j].toUpperCase());
+                        //if (j % 8 == 0) y += dy
+                        for (var i = 0; i < nchoix; i++) {
+
+                            meal[j,i] = semaine[j].createGroup();
+                            var trx0=x+(dx/3.0);
+                            var try0=y+(0.4*dy);
+                            var trdx=dx/6;
+                            var trdy=dy/4;
+                            var recback = meal[j,i].createRect({x: x, y: y, width: dx*1.4, height: dy, r:0})
+                                    .setFill(komand.couleur[0])
+                                    .setStroke(komand.couleur[0]);
+                            // on ne motre pas les cones selecteurs en mode Random
+                            if (komand.produit == 'GRID') {
+                                conup[i, j] = meal[j, i].createPath()
+                                        .moveTo(trx0, try0)
+                                        .lineTo(trx0 + trdx, try0)
+                                        .lineTo(trx0 + trdx / 2, try0 - trdy)
+                                        .lineTo(trx0, try0)
+                                        .setStroke('white')
+                                        .setFill('white');
+                                try0 = y + (0.6 * dy);
+                                condown[i, j] = meal[j, i].createPath()
+                                        .moveTo(trx0, try0)
+                                        .lineTo(trx0 + trdx, try0)
+                                        .lineTo(trx0 + trdx / 2, try0 + trdy)
+                                        .lineTo(trx0, try0)
+                                        .setStroke('white')
+                                        .setFill('white');
+                            }
+                            var txtback = meal[j,i].createRect({x: x+dx*0.03, y: y+(dy *0.14), width: dx/5, height: dy
+                            *.7})
+                                    .setFill('white')
+                                    .setStroke('white');
+                            if (komand.produit == 'RANDOM') {
+
+                                if (i == nchoix - 1) {
+                                    reste=convives - nItems[j]
+                                    chxInt[j][i] = reste
+                                }
+                                else {
+                                    reste=(convives - nItems[j])/2
+                                    chxInt[j][i] = getRandomInt(seuil, reste)
+                                }
+                            }
+                            if (komand.produit == 'GRID') {
+                                if (komand.detail && useDetail) {
+                                    chxInt[j][i] = parseInt(detail[j][i]);
+                                }
+                                else {
+                                    if (i == nchoix - 1) {
+                                        chxInt[j][i] = convives - nItems[j]
+                                    }
+                                    else {
+                                        chx = choix.roundUsing(Math.ceil, 0).toString();
+                                        chxInt[j][i] = parseInt(chx);
+                                    }
+                                }
+                            }
+                            dji++
+                            var strChx=chxInt[j][i].toString()
+                            nItems[j]+=chxInt[j][i];
+                            var ij = i.toString()+ j.toString()
+                            Plats[ij] = meal[j,i].createTextPath({text: "TextPath!"})
+                                    .moveTo(x+(dx/10), y+(dy*0.7))
+                                    .lineTo(x+2*dx,y+(dy*0.7))
+                                    .setFont({ family: komand.policechar, size: fontsize, weight: "normal" })
+                                    .setFill("black")
+                                    .setText(strChx);
+                            if (komand.produit == 'GRID') {
+                                on(conup[i, j], touch.press, function (e) {
+                                    console.log('hit: ');
+                                    var rct = e.gfxTarget.parent.children[0];
+                                    var txt = e.gfxTarget.parent.children[4];
+                                    var txtInt = parseInt(txt.text.text);
+                                    var nexTxt = txtInt + 1;
+                                    if (txtInt < convives) {
+
+                                        rct.setFill(komand.couleur[0]);
+                                        var strNexTxt = nexTxt.toString();
+                                        txt.setText(strNexTxt);
+                                        var nMeals = parseInt(e.gfxTarget.parent.parent.children[0].children[1].text.text);
+                                        nMeals++;
+                                        e.gfxTarget.parent.parent.children[0].children[1].setText(nMeals.toString());
+                                        if (nMeals != convives) {
+                                            e.gfxTarget.parent.parent.children[0].children[1].setFill(new
+                                                    dojo.Color([255, 0, 0, 0.5]))
+                                            e.gfxTarget.parent.parent.children[0].children[0].setStroke('red');
+                                        }
+                                        else {
+                                            e.gfxTarget.parent.parent.children[0].children[1].setFill(new
+                                                    dojo.Color([255, 255, 255, 0.5]))
+                                            e.gfxTarget.parent.parent.children[0].children[0].setStroke(komand.couleur[2]);
+                                        }
+                                    }
+                                    //nItems[j] ++
+                                    //totJour[j].children[1].setText(nItems[j].toString())
+                                });
+                                on(condown[i, j], touch.press, function (e) {
+                                    console.log('hit: ');
+                                    var rct = e.gfxTarget.parent.children[0];
+                                    var txt = e.gfxTarget.parent.children[4];
+                                    var txtInt = parseInt(txt.text.text);
+                                    var nexTxt = txtInt - 1;
+                                    if (txtInt > 0) {
+                                        rct.setFill(komand.couleur[0]);
+                                        var strNexTxt = nexTxt.toString();
+                                        txt.setText(strNexTxt);
+                                        var nMeals = parseInt(e.gfxTarget.parent.parent.children[0].children[1].text.text);
+                                        nMeals--;
+                                        e.gfxTarget.parent.parent.children[0].children[1].setText(nMeals.toString());
+                                        if (nMeals != convives) {
+                                            e.gfxTarget.parent.parent.children[0].children[1].setFill(new
+                                                    dojo.Color([255, 0, 0, 0.5]))
+                                            e.gfxTarget.parent.parent.children[0].children[0].setStroke('red');
+                                        }
+                                        else {
+                                            e.gfxTarget.parent.parent.children[0].children[1].setFill(new
+                                                    dojo.Color([255, 255, 255, 0.5]))
+                                            e.gfxTarget.parent.parent.children[0].children[0].setStroke(komand.couleur[2]);
+                                        }
+                                    }
+                                });
+                            }
+                            on( eaterBox,touch.press, function(e){
+                                inputMode=true;
+                                chiffre = '';
+                            });
+                            on(document, 'keypress', function(evt){
+
+                                if(inputMode) {
+                                    console.log(evt.charCode);
+                                    var kod = parseInt(evt.charCode);
+                                    var d = new Date();
+                                    thisTime = d.getTime();
+                                    var timSinceLastKey =thisTime-keyTime;
+                                    keyTime=thisTime;
+                                    if (kod > 47 && kod <59 && timSinceLastKey > 50) {
+
+                                        chiffre = chiffre + String.fromCharCode(evt.charCode);
+                                        eaterBox.children[1].setText(chiffre)
+                                    }
+                                    if (kod == 13 ) {
+                                        inputMode=false;
+                                        convives=parseInt(chiffre);
+                                        console.log (chiffre);
+                                        choix = convives /nchoix
+                                        for(var l = 0; l < semaine.length; l++)    {
+                                            nItems[l]=0
+                                            for (var m = 0; m < nchoix; m++) {
+                                                var ml = m.toString()+ l.toString()
+                                                if (komand.produit == 'RANDOM') {
+
+                                                    if (m == nchoix - 1) {
+                                                        reste=convives - nItems[l]
+                                                        chxInt[l][m] = reste
+                                                    }
+                                                    else {
+                                                        reste=(convives - nItems[l])/2
+                                                        chxInt[l][m] = getRandomInt(seuil, reste)
+                                                    }
+                                                }
+                                                else {
+                                                    if (m == nchoix - 1) {
+                                                        chxInt[l][m] = convives - nItems[l];
+                                                    }
+                                                    else {
+                                                        var mchx = choix.roundUsing(Math.ceil, 0).toString();
+                                                        chxInt[l][m] = parseInt(mchx);
+                                                    }
+                                                }
+                                                nItems[l] += chxInt[l][m];
+                                                var mstrChx = chxInt[l][m].toString()
+                                                Plats[ml].setText(mstrChx)
+                                            }
+
+                                            var nPlats  = nItems[l].toString()
+                                            totJour[l].children[1].setText(nPlats);
+
+                                        }
+
+                                    }
+
+                                }
+                            });
+
+                            var peopletxt = meal[j,i].createTextPath({text: "TextPath!"})
+                                    .moveTo(x+(dx/1.6), y+(dy*0.6))
+                                    .lineTo(x+2*dx,y+(dy*0.6))
+                                    .setFont({ family: komand.policechar, size: fontsize, weight: "bold" })
+                                    .setFill("white")
+                                    .setText('Персоны');
+                            x += 1.5 * dx
+                        }
+                        totJour[j].children[1].setText(nItems[j].toString())
+                    }
+
+                    checkoutBox.createRect({x: 5*dx, y: y+2*dy, width: dx, height: dy *1.2})
+                            .setFill('white')
+                            .setStroke(komand.couleur[0]);
+                    checkoutBox.createTextPath({text: "TextPath!"})
+                            .moveTo(5*dx+0.14*dx,  y+2.7*dy)
+                            .lineTo(6.2*dx, y+2.7*dy)
+                            .setFont({ family: komand.policechar, size: fontsize, weight: "bold" })
+                            .setFill(komand.couleur[0])
+                            .setText('проверить');
+
+                }, function(err){
+                    // Handle the error condition
+                }, function(evt){
+                    // Handle a progress event from the request if the
+                    // browser supports XHR2
+                });
+                on( checkoutBox,touch.press, function(e){
+                    // n'activer que si les nbre de plats = convives * jours
+                    var vcioOK=true
+                    var totplts=0
+                    if (totJour.length == jours) {
+                        for (var n = 0; n < jours; n++) {
+                            var plts = totJour[n].children[1].text.text
+                            var iplts = parseInt(plts)
+                            if (iplts != convives) vcioOK=false
+                            totplts+=iplts
+                        }
+                        if (vcioOK) {
+                            checkoutBox.children[0].setStroke('green')
+                            // renvoyer a Drupal chxInt
+                            for(var l = 0; l < semaine.length; l++)    {
+                                nItems[l]=0
+                                for (var m = 0; m < nchoix; m++) {
+                                    var ml = m.toString()+ l.toString()
+                                    var aa =Plats[ml].text.text
+                                    chxInt[l][m] = parseInt(aa)
+                                }
+
+                                var nPlats  = nItems[l].toString()
+                                totJour[l].children[1].setText(nPlats);
+
+                            }
+
+
+                            var args = chxInt.join("_");
+                            xhr.get('http://belayaikra.ru/caviar/chequeout/'+convives+'/'+args+debugStr, {
+                                handleAs: "json"
+                            }).then(function(komand){
+                                window.top.location.href = "http://belayaikra.ru/checkout"+debugStr;
+
+                            }, function(err){
+                                // Handle the error condition
+                            }, function(evt){
+                                // Handle a progress event from the request if the
+                                // browser supports XHR2
+                            });
+
+                        }
+                        else {
+                            checkoutBox.children[0].setStroke('red')
+                        }
+                    }
+
+                });
+            });
+
+        }
+    });
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+    Number.prototype.roundUsing = function(func, prec){
+        var temp = this * Math.pow(10, prec);
+        temp = func(temp);
+        return temp / Math.pow(10, prec)
+    }
+
+</script>
+<div data-dojo-type="dojox.mobile.Heading">
+    <span id="monbut"  data-dojo-type="dojox.mobile.ToolBarButton" onClick="showSelectedValue()"
+          data-dojo-props='label:"OK"'></span>
+</div>
+<div id="view1" data-dojo-type="dojox/mobile/View">
+    <div id="accordion1"></div>
+</div>
+
+
+<p id="msg"></p>
+<div id="caviar"></div>
+<form id="aaa"></form>
+</body>
+</html>

@@ -1,0 +1,8 @@
+name = caviar Module
+description = "caviar module."
+package = caviar
+core = 7.x
+files[] = caviar.module
+stylesheets[all][] = caviar.css
+version = "1.01-dev"
+

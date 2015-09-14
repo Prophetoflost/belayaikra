@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'belayaikra';
+    src: url("http://belayaikra.ru/sites/default/files/fontyourface/local_fonts/Belaya_Ikra_Extra_Condensed-normal-300/belaya_ikra_extra_condensed_thin-webfont.eot");
+    src: url("http://belayaikra.ru/sites/default/files/fontyourface/local_fonts/Belaya_Ikra_Extra_Condensed-normal-300/belaya_ikra_extra_condensed_thin-webfont.eot?#iefix") format("embedded-opentype"),
+    url("http://belayaikra.ru/sites/default/files/fontyourface/local_fonts/Belaya_Ikra_Extra_Condensed-normal-300/belaya_ikra_extra_condensed_thin-webfont.ttf") format("truetype"),
+    url("http://belayaikra.ru/sites/default/files/fontyourface/local_fonts/Belaya_Ikra_Extra_Condensed-normal-300/belaya_ikra_extra_condensed_thin-webfont.woff") format("woff"),
+    url("http://belayaikra.ru/sites/default/files/fontyourface/local_fonts/Belaya_Ikra_Extra_Condensed-normal-300/belaya_ikra_extra_condensed_thin-webfont.svg#proxima_nova_excn_ththin") format("svg");
+    font-style: bold;
+    font-weight: 300;
+}

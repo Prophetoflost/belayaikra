@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7]><html class="no-js ie iem7" lang="ru" dir="ltr"><![endif]-->
+<!--[if lte IE 6]><html class="no-js ie lt-ie9 lt-ie8 lt-ie7" lang="ru" dir="ltr"><![endif]-->
+<!--[if (IE 7)&(!IEMobile)]><html class="no-js ie lt-ie9 lt-ie8" lang="ru" dir="ltr"><![endif]-->
+<!--[if IE 8]><html class="no-js ie lt-ie9" lang="ru" dir="ltr"><![endif]-->
+<!--[if (gte IE 9)|(gt IEMobile 7)]><html class="no-js ie" lang="ru" dir="ltr" prefix="content: http://purl.org/rss/1.0/modules/content/ dc: http://purl.org/dc/terms/ foaf: http://xmlns.com/foaf/0.1/ og: http://ogp.me/ns# rdfs: http://www.w3.org/2000/01/rdf-schema# sioc: http://rdfs.org/sioc/ns# sioct: http://rdfs.org/sioc/types# skos: http://www.w3.org/2004/02/skos/core# xsd: http://www.w3.org/2001/XMLSchema#"><![endif]-->
+<!--[if !IE]><!--><html class="no-js" lang="ru" dir="ltr" prefix="content: http://purl.org/rss/1.0/modules/content/ dc: http://purl.org/dc/terms/ foaf: http://xmlns.com/foaf/0.1/ og: http://ogp.me/ns# rdfs: http://www.w3.org/2000/01/rdf-schema# sioc: http://rdfs.org/sioc/ns# sioct: http://rdfs.org/sioc/types# skos: http://www.w3.org/2004/02/skos/core# xsd: http://www.w3.org/2001/XMLSchema#"><!--<![endif]-->
+<head>
+    <!-- VL150910 Dogogrid stuffs -->
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://belayaikra.ru/sites/all/libraries/dojo/dijit/themes/claro/claro.css" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <!-- load Dojo -->
+    <script src="/sites/all/libraries/dojo/dojox/mobile/deviceTheme.js"></script>
+    <script src='/sites/all/libraries/dojo/dojo/dojo.js'
+            data-dojo-config='async: true, parseOnLoad: true'></script>
+    <!-- Fin VL150910 header stiffs -->
+    <link rel="apple-touch-icon-precomposed" href="http://belayaikra.ru/sites/all/themes/omega/omega/apple-touch-icon-precomposed-114x114.png" sizes="114x114" />
+    <link rel="apple-touch-icon-precomposed" href="http://belayaikra.ru/sites/all/themes/omega/omega/apple-touch-icon-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" href="http://belayaikra.ru/sites/all/themes/omega/omega/apple-touch-icon-precomposed-144x144.png" sizes="144x144" />
+    <link rel="apple-touch-icon-precomposed" href="http://belayaikra.ru/sites/all/themes/omega/omega/apple-touch-icon-precomposed-72x72.png" sizes="72x72" />
+    <meta http-equiv="cleartype" content="on" />
+    <meta name="MobileOptimized" content="width" />
+     <meta name="HandheldFriendly" content="true" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Белая икра</title>
+    <style>
+        @import url("http://belayaikra.ru/sites/all/themes/omega/omega/css/modules/system/system.base.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/all/modules/caviar/caviar.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/all/modules/date/date_api/date.css?nug7z8");
+         @import url("http://belayaikra.ru/modules/node/node.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/all/themes/omega/omega/css/modules/field/field.theme.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/all/modules/views/css/views.css?nug7z8");
+     </style>
+    <style>
+        @import url("http://belayaikra.ru/sites/all/modules/ctools/css/ctools.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/all/modules/panels/css/panels.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/all/libraries/fontawesome/css/font-awesome.min.css?nug7z8");
+    </style>
+    <style>
+        @import url("http://belayaikra.ru/sites/all/themes/caviar/css/caviar.normalize.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/all/themes/caviar/css/caviar.hacks.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/all/themes/caviar/css/caviar.styles.css?nug7z8");
+    </style>
+
+    <!--[if lte IE 8]>
+    <style>
+        @import url("http://belayaikra.ru/sites/all/themes/caviar/css/caviar.no-query.css?nug7z8");
+    </style>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,400italic,300,500,700" media="all" />
+    <style>
+        @import url("http://belayaikra.ru/sites/default/files/fontyourface/font.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/default/files/fontyourface/local_fonts/Belaya_Ikra_Extra_Condensed-italic-300/stylesheet.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/default/files/fontyourface/local_fonts/Belaya_Ikra_Extra_Condensed-normal-300/stylesheet.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/default/files/fontyourface/local_fonts/Belaya_Ikra_Extra_Condensed-normal-900/stylesheet.css?nug7z8");
+        @import url("http://belayaikra.ru/sites/default/files/fontyourface/local_fonts/Belaya_Ikra-normal-400/stylesheet.css?nug7z8");
+    </style>
+
+</head>
+<body class="html front not-logged-in page-home mobile-grid i18n-ru">
+<!-- added tag'mobile-grid' for better theming (Dan) -->
+<!-- VL150910 Dogogrid script -->
+<script>
+    var surface = null;
+    // bug with window.innerWidth - so we use document.body , donc  obligatoire d avoir un body
+    // pour la hauter on prend window.innerHeight
+    var hauteur = parseInt(window.innerHeight);
+    var largeur = parseInt(document.body.clientWidth);
+    console.log(largeur,hauteur)
+    //console.log('innerwidth:'+window.innerWidth)
+    //alert("After this alert, the value will change.");
+    //console.log('innerwidth after alert:'+window.innerWidth)
+    var meal= new Array();
+    var conup= [];
+    var condown= [];
+    var nchoix=5;
+    var totJour=[];
+    var semaine =[];
+    var convives = 24;
+    var nItems =[];
+    var inputMode=false;
+    var thisTime =0, keyTime=0;
+    var checkoutBox=null;
+    var Plats = []
+    var chiffre ='';
+    var jours = 5;
+    var choix = 0;
+    var dd,tt;
+    //var jour = ['Monday','Thuesday','Wednesday','Thursday','Friday','Saturday'];
+    var jour = ['понедельник','вторник','среда','четверг','пятница','субота'];
+    var joursem = new Array();
+    var jourwheel = new Array();
+    var MenuWheel = new Array()
+    var MenuPlats = new Array()
+    var jourbut = new Array();
+    var chxInt =new Array();
+    var slotId =new Array();
+    var whId =new Array();
+    var jrId =new Array();
+    var dayopen=true;
+    var last
+
+
+    var detail = new Array();
+    var debugStr= '';
+    var urlcommande = 'http://belayaikra.ru/caviar/commande'+debugStr;
+
+
+
+    require([
+                'dojo',
+                'dojo/ready',
+                'dojo/on',
+                'dojo/dom',
+                'dojo/dom-attr',
+                'dojo/request',
+                'dojo/dom-construct',
+                'dijit/registry',
+                'dojox/mobile/Accordion',
+                'dojox/mobile/ContentPane',
+                'dojox/mobile/parser',
+                'dojo/request/xhr',
+                'dojox/mobile/Button',
+                'dojox/mobile/SpinWheel',
+                 'dojox/mobile/Heading',
+                'dojox/mobile/SpinWheelSlot',
+                'dojox/mobile/Slider',
+                'dojo/domReady!'
+            ],
+            function(dojo,ready, on, dom, domAttr, request, domconstruct,registry,
+                     Accordion,ContentPane,parser,xhr,Button, SpinWheel,
+                     heading,SpinWheelSlot,Slider)            {
+                ready(function(){
+                    xhr.get(urlcommande, {
+                        handleAs: "json"
+                    }).then(function(komand) {
+                        //console.log( 'height: ' + ecranhauteur + ' width: ' + ecranlargeur)
+                        // Do something with the handled data
+                        // var xxx = resp.quantity
+                        // problem with quantity provided by drupal
+                        if (komand.convives) convives = komand.convives;
+                        else convives = 20;
+                        choix= convives /nchoix;
+                        if (komand.detail.length > 0) {
+                            var det1 = komand.detail.split('_')
+                            for (var r = 0; r < det1.length; r++) {
+                                detail[r] = det1[r].split(',');
+                            }
+                        }
+                        // var grid = registry.byId("accordionView1");
+                        var hautpx = hauteur + 'px'
+                        var accordion = new Accordion({iconBase: "demos/mobileGallery/images/icons16.png"},
+                                "accordion1");
+                        accordion.startup();
+
+                        var eaterpane = new ContentPane({
+                            style:"height:125px"
+                        }, 'eaters');
+                        var sliderchange = function(e) {
+                            eaterBut._setLabelAttr('ИТОГО ЛЮДИ: ' + e); // Number of eaters
+                            convives=parseInt(e)
+                        };
+                        var eaterConfirm = function() {
+
+                            choix = convives /nchoix
+
+                            dd = new Date();
+                            tt = dd.getTime();
+                            for(var s = 0; s < jours; s++)    {
+                                for (var t = 0; t < nchoix; t++) {
+                                    dojo.destroy(slotId[s][t])
+                                    slotId[s][t]= s+'_'+t+'_'+tt
+                                }
+                                dojo.destroy(whId[s])
+                                accordion.removeChild(0)
+                            }
+                            dayopen=true
+                            for(var s = 0; s < jours; s++)    {
+                                //VL150910
+
+                                jrId[s]='jour'+s+'_'+tt
+
+                                joursem[s] = new ContentPane({
+                                    id: jrId[s],
+                                    label: jour[s],
+                                    selected:dayopen,
+                                    iconPos1: "16,48,16,16"
+                                });
+
+                                dayopen=false; // so than only monday accordeon is open
+                                accordion.addChild(joursem[s]);
+
+
+                                dd = new Date()
+                                tt = dd.getTime()
+                                whId[s]='wheel'+s+'_'+tt
+                                //dojo.byId(whid).innerHLML =''
+                                jourwheel[s] = new SpinWheel({id: whId[s], style: {height: hautwheel+'px'}});
+                                jourwheel[s].placeAt(joursem[s].containerNode);
+                                jourwheel[s].startup();
+                                nItems[s]=0
+                                chxInt[s] = new Array(nchoix)
+                                for (var t = 0; t < nchoix; t++) {
+                                    if (t == nchoix-1) {
+                                        var mchxInt = convives-nItems[s];
+                                        nItems[s]+=mchxInt;
+                                        var mstrChx=mchxInt.toString()
+                                    }
+                                    else {
+                                        mchx=choix.roundUsing(Math.ceil, 0).toString();
+                                        mchxInt = parseInt(mchx);
+                                        nItems[s]+=mchxInt;
+                                        mstrChx=mchxInt.toString()
+                                    }
+                                    chxInt[s][t] = mchxInt
+
+                                    meal[s][t] = new SpinWheelSlot({id: slotId[s][t], labelFrom:0, labelTo:convives,
+                                        value: chxInt[s][t],
+                                        style: {width:"50px"}});
+                                    jourwheel[s].addChild(meal[s][t]);
+
+                                    jourwheel[s].connect(meal[s][t], "onFlickAnimationEnd", function(e) {
+                                        // var aaa = meal[s][t].get('value')
+                                        var aa=  this.id
+                                        var bb= e.path[1].id.split('_')
+                                        var a = parseInt(bb[0])
+                                        var b = parseInt(bb[1])
+                                        var q = parseInt(meal[a][b].get('value'))
+                                        nItems[a] -= chxInt[a][b]
+                                        nItems[a] += q
+
+                                        chxInt[a][b] = q
+                                        var but = dojo.byId("monbut")
+                                        but.innerHTML= jour[a] + ', блюдо: '+ b + ', число: '+ q + ', сумма: ' + nItems[a] ;
+
+                                        if (nItems[a] == convives) {
+                                            //label but is OK
+                                            checkoutBut.domNode.innerHTML = 'Проверить'
+                                            checkoutBut.class = "mblBlueButton"
+                                            checkoutBut.params.class = "mblBlueButton"
+
+                                        }
+                                        else {
+                                            checkoutBut.domNode.innerHTML = 'Числа не соответствуют'
+                                            checkoutBut.class = "unselectable"
+                                            checkoutBut.params.class = "unselectable"
+                                        }
+                                    });
+
+                                }
+                            }
+                        };
+
+
+                        var eaterBut = new Button({label:
+                        'ИТОГО ЛЮДИ: ' + convives, onClick: eaterConfirm,  class: "mblBlueButton"});
+                        eaterBut.placeAt(eaterpane.containerNode);
+                        eaterBut.startup();
+
+                        var eaterSlider = new Slider({id: 'eatersldr',orientation: 'H', min: 10, max:80,
+                            value: 20, step:1, intermediateChanges:true, halo: '20pt', onChange: sliderchange})
+                        eaterSlider.placeAt(eaterpane.containerNode)
+                        eaterSlider.startup()
+
+
+
+
+
+                        //accordion.addChild(eaterpane)
+                        var hautwheel= parseInt(hauteur/5)
+                        MenuWheel = new SpinWheel({id: 'menuwheel'+j, style: {height: '50px'}});
+                        MenuWheel.placeAt(eaterpane.containerNode)
+                        MenuWheel.startup()
+
+                        MenuPlats =new Array()
+
+                        MenuPlats[0] =  new SpinWheelSlot({id: 'menuplats0'+j,
+                            labels:['<img src=icons/choix1.png>',],
+                            style:{width:"50px"}});
+                        MenuWheel.addChild(MenuPlats[0]);
+                        MenuPlats[1] =  new SpinWheelSlot({id: 'menuplats1'+j,
+                            labels:['<img src=icons/choix2.png>',],
+                            style:{width:"50px"}});
+                        MenuWheel.addChild(MenuPlats[1]);
+                        MenuPlats[2] =  new SpinWheelSlot({id: 'menuplats2'+j,
+                            labels:['<img src=icons/choix3.png>',],
+                            style:{width:"50px"}});
+                        MenuWheel.addChild(MenuPlats[2]);
+                        MenuPlats[3] =  new SpinWheelSlot({id: 'menuplats3'+j,
+                            labels:['<img src=icons/choix4.png>',],
+                            style:{width:"50px"}});
+                        MenuWheel.addChild(MenuPlats[3]);
+                        MenuPlats[4] =  new SpinWheelSlot({id: 'menuplats4'+j,
+                            labels:['<img src=icons/choix5.png>',],
+                            style:{width:"50px"}});
+                        MenuWheel.addChild(MenuPlats[4]);
+                        dayopen=true
+
+                        for (var j = 0; j < jours; j++) {
+                            nItems[j]=0;
+                            dd = new Date()
+                            tt = dd.getTime()
+                            jrId[j]='jour'+j+'_'+tt
+                            joursem[j] = new ContentPane({
+                                id: jrId[j],
+                                label: jour[j],
+                                selected:dayopen,
+                                iconPos1: "16,48,16,16"
+                            });
+                            dayopen=false; // so than only monday accordeon is open
+                            accordion.addChild(joursem[j]);
+                            dd = new Date()
+                            tt = dd.getTime()
+                            whId[j]='wheel'+j+'_'+tt
+                            jourwheel[j] = new SpinWheel({id: whId[j], style: {height: hautwheel+'px'}});
+                            jourwheel[j].placeAt(joursem[j].containerNode);
+                            jourwheel[j].startup();
+
+                            chxInt[j] = new Array(nchoix)
+                            slotId[j] = new Array(nchoix)
+                            meal[j] = new Array(nchoix)
+                            for (var i = 0; i < nchoix; i++) {
+                                if (komand.detail.length > 0) {
+                                    chxInt[j][i] = parseInt(detail[j][i]);
+                                }
+                                else {
+                                    if (i == nchoix - 1) {
+                                        chxInt[j][i] = convives - nItems[j]
+                                    }
+                                    else {
+                                        chx = choix.roundUsing(Math.ceil, 0).toString();
+                                        chxInt[j][i] = parseInt(chx);
+                                    }
+                                }
+                                var strChx = chxInt[j][i].toString()
+                                nItems[j] += chxInt[j][i];
+                                dd = new Date();
+                                tt = dd.getTime();
+                                slotId[j][i]= j+'_'+i+'_'+tt
+                                meal[j][i] = new SpinWheelSlot({id: slotId[j][i], labelFrom:0, labelTo:convives, value:
+                                        chxInt[j][i],
+                                    style:{width:"50px", fontSize:"0.8em"}});
+                                jourwheel[j].addChild(meal[j][i]);
+
+                                jourwheel[j].connect(meal[j][i], "onFlickAnimationEnd", function(e) {
+                                    // var aaa = meal[j][i].get('value')
+                                    var aa=  this.id
+                                    var bb= e.path[1].id.split('_')
+                                    var a = parseInt(bb[0])
+                                    var b = parseInt(bb[1])
+                                    var q = parseInt(meal[a][b].get('value'))
+                                    nItems[a] -= chxInt[a][b]
+                                    nItems[a] += q
+
+                                    chxInt[a][b] = q
+                                    var but = dojo.byId("monbut")
+                                    but.innerHTML= jour[a] + ', блюдо: '+ b + ', число: '+ q + ', сумма: ' + nItems[a] ;
+
+                                    if (nItems[a] == convives) {
+                                        //label but is OK
+                                        checkoutBut.domNode.innerHTML = 'Проверить'
+                                        checkoutBut.class = "mblBlueButton"
+                                        checkoutBut.params.class = "mblBlueButton"
+
+                                    }
+                                    else {
+                                        checkoutBut.domNode.innerHTML = 'Числа не соответствуют'
+                                        checkoutBut.class = "unselectable"
+                                        checkoutBut.params.class = "unselectable"
+                                    }
+                                });
+
+                             }
+                        }
+                        // VL 150714
+
+                        var checkoutBut = new Button({label: 'Проверить', class: "mblBlueButton"}, 'checkoutbut1');
+                        //accordion.addChild(checkoutBut);
+                        //checkoutBut.placeAt(checkoutPane.containerNode);
+                        checkoutBut.startup();
+
+
+                        on(checkoutBut,'click',function(e) {
+                            // n'activer que si les nbre de plats = convives * jours
+                            var vcioOK=true
+                            var GoodVal = jours * convives
+                            var totplts=0
+                            for (var n = 0; n < jours; n++) {
+                                totplts+=nItems[n]
+                            }
+                            if (totplts == GoodVal) {
+                                //checkoutBox.children[0].setStroke('green')
+                                // renvoyer a Drupal chxInt
+
+
+                                var args = chxInt.join("_");
+                                xhr.get('http://belayaikra.ru/caviar/chequeout/'+convives+'/'+args+debugStr, {
+                                    handleAs: "json"
+                                }).then(function(komand){
+                                    window.top.location.href = "http://belayaikra.ru/checkout"+debugStr;
+
+                                }, function(err){
+                                    // Handle the error condition
+                                }, function(evt){
+                                    // Handle a progress event from the request if the
+                                    // browser supports XHR2
+                                });
+
+                            }
+                            else {
+                                //checkoutBox.children[0].setStroke('red')
+                            }
+
+                        })
+
+                    });
+
+                });
+            });
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+    Number.prototype.roundUsing = function(func, prec){
+        var temp = this * Math.pow(10, prec);
+        temp = func(temp);
+        return temp / Math.pow(10, prec)
+    }
+
+</script>
+<!-- VL150910 Dogogrid script -->
+<main>
+    <div id="page-wrapper" class="l-page">
+
+        <div class="l-main">
+            <div id="content-area" class="l-content l-region" role="main">
+
+                <div class="l-branding">
+
+                </div>
+
+                <a id="main-content"></a>
+                <div class="panel-pane pane-panels-mini pane-branding">
+                    <div class="panel-pane pane-page-logo">
+                        <a href="/" rel="home" id="logo" title="Главная"><img src="http://belayaikra.ru/sites/all/themes/caviar/logo.png" alt="Главная" /></a>    </div>
+                </div>
+
+
+        </div>
+        <!-- VL150912 debut DojoGrid Corpus -->
+            <div data-dojo-type="dojox.mobile.Heading">
+    <span id="monbut"  data-dojo-type="dojox.mobile.ToolBarButton" class = "unselectable"
+          data-dojo-props='label:"ДЕТАЛЬНЫЙ ЗАКАЗ"'></span-->
+            </div>
+            <div id="view1" data-dojo-type="dojox/mobile/View">
+                <div id="eaters"></div>
+                <div id="accordion1"></div>
+                <div id="checkoutbut1"></div>
+            </div>
+
+            <p id="msg"></p>
+            <div id="caviar"></div>
+            <form id="aaa"></form>
+            <!-- VL150910 Fin DojoGrid Corpus -->
+        <footer class="l-footer" role="contentinfo">
+            <div class="l-region l-region--footer">
+                <div class="panel-pane pane-panels-mini pane-footer">
+                    <div class="panel-pane pane-block pane-menu-menu-footer-menu footer-nav">
+                        <ul class="menu"><li class="first leaf"><a href="/" title="" class="active">Главная</a></li>
+                            <li class="leaf"><a href="/o-proyekte">О проекте</a></li>
+                            <li class="leaf"><a href="/kak-eto-rabotayet">Как это работает</a></li>
+                            <li class="leaf"><a href="/menu" title="">Меню</a></li>
+                            <li class="leaf"><a href="/kak-zakazat">Как заказать</a></li>
+                            <li class="leaf"><a href="/dostavka">Доставка</a></li>
+                            <li class="leaf"><a href="/smi-o-nas">СМИ о нас</a></li>
+                            <li class="leaf"><a href="/otzyvy-kliyentov">Отзывы клиентов</a></li>
+                            <li class="leaf"><a href="/kontakty">Контакты</a></li>
+                            <li class="leaf"><a href="/user" title="">Личный кабинет</a></li>
+                            <li class="leaf"><a href="/user/login" title="">Вход в личный кабинет</a></li>
+                            <li class="last leaf"><a href="/formalnosti" title="">Формальности</a></li>
+                        </ul>    </div>
+
+                    <div class="panel-pane pane-block pane-block-1 copyright">
+                        <p>© ООО «Белая Икра», 2015 г. Все права защищены.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</main>
+ </body>
+</html>
